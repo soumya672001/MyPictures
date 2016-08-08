@@ -126,7 +126,7 @@ var SampleApp = function() {
         self.app.set('views', __dirname + '/views');
         self.app.set('view engine', 'ejs');
 
-        self.app.use(logger('dev'))
+        self.app.use(self.logger('dev'))
         self.app.use(express.static(__dirname + '/static'))
 
         self.app.use('/gallery', require('node-gallery')({
