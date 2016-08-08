@@ -37,21 +37,21 @@ var SampleApp = function() {
     /**
      *  Populate the cache.
      */
-    self.populateCache = function() {
+ /*   self.populateCache = function() {
         if (typeof self.zcache === "undefined") {
             self.zcache = { 'index.html': '' };
         }
 
         //  Local cache for static content.
         self.zcache['index.html'] = fs.readFileSync('./index.html');
-    };
+    }; */
 
 
     /**
      *  Retrieve entry (content) from cache.
      *  @param {string} key  Key identifying content to retrieve from cache.
      */
-    self.cache_get = function(key) { return self.zcache[key]; };
+  //  self.cache_get = function(key) { return self.zcache[key]; };
 
 
     /**
@@ -95,14 +95,21 @@ var SampleApp = function() {
     self.createRoutes = function() {
         self.routes = { };
 
-        self.routes['/asciimo'] = function(req, res) {
-            var link = "http://i.imgur.com/kmbjB.png";
-            res.send("<html><body><img src='" + link + "'></body></html>");
+        self.routes['/gallery*'] = function (req, res, next) {
+        	  try {
+        		  return res.render('gallery.ejs', { galleryHtml : req.html });
+        	    } catch (e) {
+        	    next(e)
+        	  }
         };
 
-        self.routes['/'] = function(req, res) {
-            res.setHeader('Content-Type', 'text/html');
-            res.send(self.cache_get('index.html') );
+        self.routes['/'] = function (req, res, next) {
+        	  try {
+        		    var html = template({ title: 'Home' })
+        		    res.send(html)
+        		  } catch (e) {
+        		    next(e)
+        		  }
         };
     };
 
@@ -113,8 +120,22 @@ var SampleApp = function() {
      */
     self.initializeServer = function() {
         self.createRoutes();
-        self.app = express.createServer();
+        self.app = express();
+        self.logger = require('morgan');
+        self.template = require('jade').compileFile(__dirname + '/source/templates/homepage.jade');
+        self.app.set('views', __dirname + '/views');
+        self.app.set('view engine', 'ejs');
 
+        self.app.use(logger('dev'))
+        self.app.use(express.static(__dirname + '/static'))
+
+        self.app.use('/gallery', require('node-gallery')({
+          staticFiles : 'static/resources/photos',
+          urlRoot : 'gallery',
+          title : 'Example Gallery',
+          render : false // 
+        })
+        )
         //  Add handlers for the app (from the routes).
         for (var r in self.routes) {
             self.app.get(r, self.routes[r]);
@@ -127,7 +148,7 @@ var SampleApp = function() {
      */
     self.initialize = function() {
         self.setupVariables();
-        self.populateCache();
+  //      self.populateCache();
         self.setupTerminationHandlers();
 
         // Create the express server and routes.

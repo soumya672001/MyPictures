@@ -1,0 +1,72 @@
+doctype html
+html
+  head
+    link(rel='stylesheet', href='/css/index.css')
+    title World Wide Web
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js").
+       $(function(){$('.header').hover(function(){
+             stopSlide();},
+             function() {
+             showDivs();})});
+  body
+
+    .header
+      script(type="text/javascript").
+        var slideIndex = 0;
+        var timeout;
+        var path = new Array();
+        path[0] = "images/image1.jpg";
+        path[1] = "images/image2.jpg";
+        path[2] = "images/image3.jpg";
+        path[3] = "images/image4.jpg";
+        showDivs();
+        function showDivs() {
+            var i;
+            var j;
+            var x = new Array();
+            var aTag = new Array();
+            i = slideIndex;
+            var container = document.getElementsByClassName("header");
+            while (container[0].hasChildNodes()){
+                container[0].removeChild(container[0].firstChild)};
+            //var x = document.getElementsByClassName("mySlides");
+                      
+              for (j = i, k = 0; (j <= i+2) && (k <= 2); j++, k++){
+                if (j > (path.length - 1)) { j = 0}; 
+                x[j] = document.createElement("img");
+                x[j].src = path[j];
+                x[j].style.height = '544px';
+                x[j].style.width = '746px';
+                aTag[j] = document.createElement('a');
+                aTag[j].href = "/gallery";
+                aTag[j].appendChild(x[j]);
+                x[j].onmouseover = function(e){stopSlide(); e.target.style.height = '600px'; e.target.style.width = '800px';
+                //var aTag = document.createElement('a');
+                //aTag.href = "yourlink.htm";
+                //aTag.innerHTML = "link text";
+                //console.log("test");
+                //var ImgParent = e.target.parentElement;
+                //aTag.appendChild(e.target);
+                };
+                x[j].onmouseout = function(){showDivs();};
+                container[0].appendChild(aTag[j]);
+                };
+              slideIndex ++;  
+            if (slideIndex > (path.length - 1)) {slideIndex = 0};
+            timeout = setTimeout(showDivs, 5000); 
+        }
+        function stopSlide() {
+           clearTimeout(timeout);
+        }
+
+    ul.nav
+      li: a(href='/') Home
+      li: a(href='#news') News
+      li: a(href='#about') About
+      li: a(href='#contact') Contact
+    
+    .main-content
+      block content
+
+    .footer
+      p Copyright © 2020 Futurecorpz. Futurecorpz ® is a Registered Trademark of Futures (un)Ltd. in the Mars Community and other solar systems.

@@ -24,8 +24,22 @@
     "npm": ">= 1.0.0"
   },
 
+  "scripts": {
+    "build-css": "stylus source/stylesheets/index.styl -o static/css",
+    "watch-css": "stylus source/stylesheets/index.styl -o static/css -w",
+    "clean": "rd /s /q static\\css && md static\\css",
+    "build": "npm run clean && npm run build-css",
+    "watch": "npm run clean && npm run watch-css & nodemon server -e js,jade",
+    "start": "node server"
+  },
   "dependencies": {
-    "express": "~3.4.4"
+    "express": "3.2.6",
+    "jade": "*",
+    "node-gallery": "^1.1.0",
+    "nodemon": "*",
+    "morgan": "*",
+    "ejs": "2.0.8",
+    "stylus": "*"
   },
   "devDependencies": {},
   "bundleDependencies": [],
