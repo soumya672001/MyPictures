@@ -105,7 +105,7 @@ var SampleApp = function() {
 
         self.routes['/'] = function (req, res, next) {
         	  try {
-        		    var html = template({ title: 'Home' })
+        		    var html = self.template({ title: 'Home' })
         		    res.send(html)
         		  } catch (e) {
         		    next(e)
